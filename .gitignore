@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# folders
+./log_files/
+./xyz/
+./batch/
+./batch_xyz/

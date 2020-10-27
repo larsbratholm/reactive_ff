@@ -1,0 +1,799 @@
+
+ Primary working directories    : /var/tmp/pbs.368447.bp1/molpro.UmyvEy3dY9
+ Secondary working directories  : /var/tmp/pbs.368447.bp1/molpro.UmyvEy3dY9
+ Wavefunction directory         : /home/lb17101/molpro_test/inp/lowmem/
+ Main file repository           : /home/lb17101/molpro_test/inp/lowmem/
+
+ id        : uob
+
+ Nodes                         nprocs
+ bp1-01-03-04.data.bp.acrc.priv    1
+
+ Using customized tuning parameters: mindgm=1; mindgv=20; mindgc=4; mindgr=1; noblas=0; minvec=7
+ default implementation of scratch files=df  
+
+
+ Variables initialized (934), CPU time= 0.00 sec
+ geomtyp=xyz
+ nosym
+ noorient
+ geometry={
+  C      -1.704795566265       0.281899301053      -0.209747928855
+  C       0.068986683539      -0.451338796363       0.461153910441
+  O      -0.411212531100      -0.232250494315      -1.167040226103
+  C       1.297552715199       0.315564383919       0.784739522404
+  O       2.412509139571      -0.081858985258      -0.009453146251
+  H      -1.415167824875       1.237918232239       0.187238175205
+  H      -2.113748820862      -0.238774729897       0.686939918694
+  H      -2.471462053199       0.277441215110      -1.071432126032
+  H       0.542438956949      -1.453388285774       0.568088107254
+  H      -0.593634315476      -1.209998707115      -1.435537620036
+  H       1.247528865819       1.389255913973       0.670036187454
+  H       1.496591644583      -0.065177875129       1.924781759315
+  H       2.227358242708       0.011139239976      -0.951092921471
+ }
+ basis={
+ default=vdz-f12
+ set,jkfit,context=jkfit
+ default,avtz
+ set,mp2fit,context=mp2fit
+ default,avdz
+ set,ri,context=jkfit
+ default,avtz
+ }
+ explicit,ri_basis=ri,df_basis=mp2fit,df_basis_exch=jkfit
+ df-hf,basis=jkfit
+ pno-lccsd(t)-f12,cabs_singles=1,scale_trip=1,domopt=tight
+ Commands  initialized (763), CPU time= 0.01 sec, 617 directives.
+ Default parameters read. Elapsed time= 0.08 sec
+
+ Checking input...
+ Passed
+1
+
+
+                                         ***  PROGRAM SYSTEM MOLPRO  ***
+                                       Copyright, TTI GmbH Stuttgart, 2015
+                                    Version 2019.2 linked Oct 25 2019 22:50:27
+
+
+ **********************************************************************************************************************************
+ LABEL *                                                                                 
+  64 bit serial version                                                                  DATE: 23-Sep-20          TIME: 03:04:27  
+ **********************************************************************************************************************************
+
+ SHA1:             8dbd9ae1082e4ce945b0f27595c9eb2d4aa09004
+ **********************************************************************************************************************************
+ SETTING GEOMTYP        =    XYZ
+
+ Variable memory set to 1024000000 words,  buffer space 
+
+ ZSYMEL=NOSYM
+
+ SETTING BASIS          =    VDZ-F12
+
+
+ Recomputing integrals since basis changed
+
+
+ Using spherical harmonics
+
+ Library entry C      S cc-pVDZ-F12          selected for orbital group  1
+ Library entry C      P cc-pVDZ-F12          selected for orbital group  1
+ Library entry C      D cc-pVDZ-F12          selected for orbital group  1
+ Library entry O      S cc-pVDZ-F12          selected for orbital group  2
+ Library entry O      P cc-pVDZ-F12          selected for orbital group  2
+ Library entry O      D cc-pVDZ-F12          selected for orbital group  2
+ Library entry H      S cc-pVDZ-F12          selected for orbital group  5
+ Library entry H      P cc-pVDZ-F12          selected for orbital group  5
+
+
+ PROGRAM * SEWARD (Integral evaluation for generally contracted gaussian basis sets)     Author: Roland Lindh, 1990
+
+ Geometry written to block  1 of record 700
+
+
+ Point group  C1  
+
+
+
+ ATOMIC COORDINATES
+
+ NR  ATOM    CHARGE       X              Y              Z
+
+   1  C       6.00   -3.221596719    0.532712474   -0.396366141
+   2  C       6.00    0.130365938   -0.852906715    0.871454592
+   3  O       8.00   -0.777079063   -0.438889827   -2.205386404
+   4  C       6.00    2.452019264    0.596330260    1.482942776
+   5  O       8.00    4.558981547   -0.154691063   -0.017863857
+   6  H       1.00   -2.674279609    2.339326424    0.353828871
+   7  H       1.00   -3.994406368   -0.451218845    1.298128310
+   8  H       1.00   -4.670386408    0.524287912   -2.024713279
+   9  H       1.00    1.025061068   -2.746505813    1.073530937
+  10  H       1.00   -1.121806274   -2.286566168   -2.712772943
+  11  H       1.00    2.357487889    2.625313194    1.266184888
+  12  H       1.00    2.828148329   -0.123168333    3.637310375
+  13  H       1.00    4.209097060    0.021050113   -1.797305141
+
+ Bond lengths in Bohr (Angstrom)
+
+ 1-2  3.842260220  1-3  3.192527511  1-6  2.031305624  1-7  2.106339725  1-8  2.179581827
+     ( 2.033236547)     ( 1.689412804)     ( 1.074920645)     ( 1.114626981)     ( 1.153385032)
+
+  2- 3  3.234473207   2- 4  2.804332322   2- 9  2.104051275   3-10  1.946839955   4- 5  2.693648760
+       ( 1.711609510)       ( 1.483988757)       ( 1.113415986)       ( 1.030223338)       ( 1.425417538)
+
+  4-11  2.042716796   4-12  2.302270846   5-13  1.822008616
+       ( 1.080959177)       ( 1.218309265)       ( 0.964165437)
+
+ Bond angles
+
+  1-2-3   52.78549787   1-2-4  127.43215546   1-2-9  136.65296002   1-3-2   73.42615014
+
+  1- 3-10  107.51351852   2- 1- 3   53.78835199   2- 1- 6   87.92627391   2- 1- 7   83.46383956
+
+  2- 1- 8  145.58956288   2- 3-10  100.14357877   2- 4- 5  112.45694970   2- 4-11  116.86311220
+
+  2- 4-12  100.24120690   3- 1- 6  105.88049438   3- 1- 7  126.48534879   3- 1- 8   94.84488535
+
+  3- 2- 4  111.93415476   3- 2- 9  109.01756133   4- 2- 9   95.28542805   4- 5-13  111.53369354
+
+  5- 4-11  104.71511343   5- 4-12  107.84530622   6- 1- 7  102.54515671   6- 1- 8  117.28720886
+
+  7- 1- 8  110.81365352  11- 4-12  114.66246796
+
+ NUCLEAR CHARGE:                   42
+ NUMBER OF PRIMITIVE AOS:         293
+ NUMBER OF SYMMETRY AOS:          283
+ NUMBER OF CONTRACTIONS:          222   (  222A   )
+ NUMBER OF CORE ORBITALS:           5   (    5A   )
+ NUMBER OF VALENCE ORBITALS:       28   (   28A   )
+
+
+ NUCLEAR REPULSION ENERGY  186.83345646
+
+
+ Basis set:  JKFIT                   
+ Basis size:   888
+ Attributes:
+ Sphericals:   T
+ Basis set:  MP2FIT                  
+ Basis size:   544
+ Attributes:
+ Sphericals:   T
+ Basis set:  RI                      
+ Basis size:   888
+ Attributes:
+ Sphericals:   T
+
+ **********************************************************************************************************************************
+
+
+ Eigenvalues of metric
+
+         1 0.135E-03 0.400E-03 0.536E-03 0.695E-03 0.942E-03 0.108E-02 0.133E-02 0.153E-02
+
+
+ OPERATOR DM      FOR CENTER  0  COORDINATES:    0.000000    0.000000    0.000000
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      18       32.01       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1700   
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    OPER   
+
+ PROGRAMS   *        TOTAL       INT
+ CPU TIMES  *         0.60      0.49
+ REAL TIME  *         1.61 SEC
+ DISK USED  *        32.54 MB
+ **********************************************************************************************************************************
+
+
+ PROGRAM * RHF-SCF (CLOSED SHELL)       Authors: W. Meyer, H.-J. Werner
+
+
+ NUMBER OF ELECTRONS:      21+   21-    SPACE SYMMETRY=1    SPIN SYMMETRY: Singlet 
+ CONVERGENCE THRESHOLDS:    1.00E-05 (Density)    1.00E-07 (Energy)
+ INTEGRAL THRESHOLDS:       1.00E-11 (Initial)    1.00E-11 (Final)
+ MAX. NUMBER OF ITERATIONS:       60
+ INTERPOLATION TYPE:            DIIS
+ INTERPOLATION STEPS:              2 (START)      1 (STEP)
+ LEVEL SHIFTS:                  0.00 (CLOSED)  0.00 (OPEN) 
+
+
+
+
+
+ Orbital guess generated from atomic densities. Full valence occupancy:   33
+ Using density fitting in orbital guess
+
+ Coulomb and exchange fitting
+ Thresholds for fitting:       THRAO_COUL= 1.0D-14    THRAO_EXCH= 1.0D-12    THRMO= 1.0D-11    THRPROD= 1.0D-11    THRASM= 1.0D-11
+                               THR2HLF=    1.0D-11
+
+ Molecular orbital dump at record        2100.2
+
+ Initial occupancy:  21
+
+ ITERATION   DDIFF            GRAD            ENERGY        2-EL.EN.            DIPOLE MOMENTS         DIIS   CPU(IT)  CPU(TOT)  ORB.
+    1      0.000D+00      0.000D+00      -267.71171914    565.170162   -1.46726   -0.43869   -1.15870    0      1.2      2.5     start
+    2      0.000D+00      0.428D-02      -267.78922680    562.491515   -1.02866   -0.15205   -0.43989    1      1.1      3.6     diag
+    3      0.633D-02      0.205D-02      -267.80333990    563.931502   -1.25365   -0.10819   -0.56158    2      1.2      4.8     diag
+    4      0.205D-02      0.634D-03      -267.80608444    563.772665   -1.24354   -0.12146   -0.51988    3      1.2      5.9     diag
+    5      0.906D-03      0.202D-03      -267.80660902    563.706676   -1.25249   -0.09973   -0.50492    4      1.1      7.1     diag
+    6      0.443D-03      0.903D-04      -267.80674245    563.779227   -1.25612   -0.10085   -0.49168    5      1.1      8.2     diag
+    7      0.224D-03      0.515D-04      -267.80678931    563.746949   -1.25392   -0.10040   -0.49247    6      1.1      9.4     diag
+    8      0.153D-03      0.219D-04      -267.80679985    563.751801   -1.25231   -0.10113   -0.48843    7      1.2     10.5     diag
+    9      0.830D-04      0.838D-05      -267.80680104    563.754486   -1.25108   -0.10150   -0.48830    8      1.1     11.7     diag
+   10      0.274D-04      0.267D-05      -267.80680117    563.753013   -1.25044   -0.10183   -0.48799    9      1.1     12.8     orth
+   11      0.975D-05      0.714D-06      -267.80680118    563.753421   -1.25031   -0.10186   -0.48789    9      1.1     13.9     diag
+   12      0.222D-05      0.300D-06      -267.80680118    563.753191   -1.25028   -0.10186   -0.48787    0      1.1     15.1     orth
+
+ Final occupancy:  21
+
+ !RHF STATE  1.1 Energy              -267.806801181810
+ Nuclear energy                       186.83345646
+ One-electron energy                 -736.51685301
+ Two-electron energy                  281.87659537
+ Virial quotient                       -1.00233485
+ !RHF STATE  1.1 Dipole moment         -1.25028328    -0.10185933    -0.48786623
+ Dipole moment /Debye                  -3.17769499    -0.25888365    -1.23995104
+
+ Orbital energies:
+
+         1.1          2.1          3.1          4.1          5.1          6.1          7.1          8.1          9.1         10.1
+    -20.623317   -20.533663   -11.334248   -11.272718   -11.220791    -1.368219    -1.337199    -0.978676    -0.947316    -0.786751
+
+        11.1         12.1         13.1         14.1         15.1         16.1         17.1         18.1         19.1         20.1
+     -0.705114    -0.661315    -0.638833    -0.612679    -0.583186    -0.559477    -0.524608    -0.501855    -0.471049    -0.430681
+
+        21.1         22.1         23.1
+     -0.290135     0.050390     0.054440
+
+
+ HOMO     21.1    -0.290135 =      -7.8950eV
+ LUMO     22.1     0.050390 =       1.3712eV
+ LUMO-HOMO         0.340525 =       9.2662eV
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      18       32.01       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1700   
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    OPER   
+
+              2       4        4.17       700     1000      520     2100   
+                                         GEOM     BASIS   MCVARS     RHF  
+
+ PROGRAMS   *        TOTAL     DF-HF       INT
+ CPU TIMES  *        15.68     15.08      0.49
+ REAL TIME  *        17.33 SEC
+ DISK USED  *        91.86 MB
+ **********************************************************************************************************************************
+
+ Basis set:  JKFIT                   
+ Basis size:   888
+ Attributes:
+ Sphericals:   T
+ Basis set:  MP2FIT                  
+ Basis size:   544
+ Attributes:
+ Sphericals:   T
+ Basis set:  RI                      
+ Basis size:   888
+ Attributes:
+ Sphericals:   T
+
+ World communicator: rank 0, size 1
+ Shared-memory communicator: rank 0, size 1
+ Current node: rank 0, 1 node(s) in total
+
+ Restoring occupations from record    2100.2
+
+ Program * PNO-LCCSD(T)-F12   Authors:   H.-J. Werner (2012), M. Schwilk, Q. Ma (2016)
+
+ Number of core orbitals:           5
+ Number of closed-shell orbitals:  16
+ Number of open-shell orbitals:     0
+ Number of valence orbitals:       16
+ Number of external orbitals:     201
+
+
+ Calculation of CABS singles correction
+ ======================================
+
+
+ Molecular orbitals read from record     2100.2  Type=RHF/CANONICAL (state 1.1)
+ Fock matrix read from record            2100.2  Type=RHF/TOTAL (state 1.1)
+ Some Fock operators are calculated for F12-singles only.
+
+ AO(A)-basis ORBITAL           loaded. Number of functions:     222
+ RI(R)-basis RI                loaded. Number of functions:     888
+ DF-basis JKFIT                loaded. Number of functions:     888
+
+ Screening thresholds:   THRAO=  1.00D-10  THRMO=  1.00D-09  THRPROD=  1.00D-09
+                         THRSW=  1.00D-05  THROV=  1.00D-12  THRAOF12= 1.00D-08
+
+ CPU time for Fock operators                     17.89 sec
+
+ Construction of ABS:
+ Smallest eigenvalue of S          2.08E-06  (threshold= 1.00E-08)
+ Ratio eigmin/eigmax               1.64E-07  (threshold= 1.00E-09)
+ Smallest eigenvalue of S kept     2.08E-06  (threshold= 2.08E-06, 0 functions deleted, 888 kept)
+
+ Construction of CABS:
+ Smallest eigenvalue of S          1.31E-08  (threshold= 1.00E-08)
+ Ratio eigmin/eigmax               1.31E-08  (threshold= 1.00E-09)
+ Smallest eigenvalue of S kept     1.31E-08  (threshold= 1.31E-08, 0 functions deleted, 888 kept)
+
+ CPU time for CABS singles                        0.52 sec
+
+ CABS-singles contribution of  -0.02051640 patched into reference energy.
+ New reference energy        -267.82731758
+
+ Leaving lmp2-f12 by request (CABS_SINGLES < 0) after calculation of singles.
+
+ USING TIGHT DOMAIN OPTIONS: THRLMO=0.20  IEXT=3  THROSV=  1.0D-10
+                             THRPNO_LMP2=1.0D-08  THREN_LMP2=0.997
+                             THRPNO_CC=  1.0D-08  THREN_CC=  0.997
+                             THRTNO_T0=  1.0D-10  THRTNO_T=1.0D-07
+
+ iclose= 0  iweak= 0  rclose= 0.00  rweak= 0.00  thrclos= 1.0D-04  thrweak= 1.0D-05  open-shell=F
+
+ Use_GA=T  Use_PAO=T  PAO_pairdom=F  PAO_trans=T  LOCFIT= 1  LOCRI=T  EIJDIP=2  PROJECT_K=T
+
+ Threshold for small PAO norm:    0.00D+00
+ Threshold for redundancy check:  1.00D-06
+
+ OPTIONS FOR CCSD:   method= LCCSD     icepa= -1  icepac=-1  icepaw= 2  keepcls=1  maxcls=1  maxclt=2  maxwkt=2  do_mp2w=F
+                     project_k=T    project_j=ALL    idexp4_close=0
+
+ OPTIONS FOR SINGLES IN CCSD:   isexp4=  1  isexp5= 0  isexp6= 0  project_je=T  project_s=WEAK
+                                includeGE= 1  includeKEKJ= 1  includeJEKJ= 0  includeJ= 2  undress=T  project_ke=2
+
+ Molecular orbitals read from record     2100.2  Type=RHF/CANONICAL (state 1.1)
+ Orbital energies read from record       2100.2  Type=RHF/CANONICAL (state 1.1)
+ Fock matrix read from record            2100.2  Type=RHF/TOTAL (state 1.1)
+
+  Reference energy                   -267.806801181809
+  CABS singles correction              -0.020516398592
+  New reference energy               -267.827317580401
+
+
+ Computing intrinsic bond orbitals
+ =================================
+
+ Basis set MINAO-AUTO-PP generated.      Number of basis functions:   33 
+
+ Polarized AO type:                A = (O Ot + (1-O)(1-Ot)) P12
+ Orthogonalization method:         Symmetric (Loewdin)
+ Localization functional:          L = sum[A,i] <i|n_A|i>^4 -> max
+
+ Localization group 1:  16 orbitals, occupancy  2.000
+ Iterative localization: IB/PM,    7 iter; Final gradient 0.61E-08
+
+ Summary of localized orbital composition:   [THRPRINT= 0.020]
+
+   ORB  GRP  ORB.ENERGY      CENTERS/CHARGES
+     6   1    -0.939600      O  5   1.360   H 13   0.632
+     7   1    -0.899935      O  5   1.315   C  4   0.679
+     8   1    -0.896107      O  3   1.479   C  1   0.313   C  2   0.194
+     9   1    -0.895562      O  3   1.363   H 10   0.625
+    10   1    -0.816258      O  3   1.987
+    11   1    -0.748232      C  4   1.007   C  2   0.992
+    12   1    -0.720780      C  1   1.183   H  6   0.812
+    13   1    -0.708028      O  5   1.984
+    14   1    -0.692076      C  1   1.186   H  7   0.810
+    15   1    -0.681107      C  1   1.129   H  8   0.870
+    16   1    -0.676831      C  4   1.123   H 11   0.870
+    17   1    -0.640661      C  2   1.097   H  9   0.883
+    18   1    -0.613220      C  4   1.081   H 12   0.874   C  2   0.038
+    19   1    -0.578340      O  3   1.690   C  2   0.187   C  1   0.105
+    20   1    -0.483694      O  5   1.974   (other: 0.026)
+    21   1    -0.406662      C  2   1.778   C  1   0.141   C  4   0.030   H  8   0.026   (other: 0.025)
+
+ Localizing core orbitals
+
+ CPU Time for LMOs:                 18.87 sec. Elapsed time:    19.85 sec. Memory usage:     0.20 MW (max).
+ CPU Time for PAOs:                  0.01 sec. Elapsed time:     0.01 sec. Memory usage:     0.25 MW (max).
+
+ Distance criteria for pair classes:       RCLOSE= 0.0  RWEAK= 0.0  RDIST= 0.0  RVDIST=-1.0
+ Connectivity criteria for pair classes:   ICLOSE=   0  IWEAK=   0  IDIST=   0  IVDIST=  -1
+
+ Augmenting orbital domains by 3 shell(s) of neighboring atoms.  Minimum radius:     7.00
+ Augmenting RI domains by 4 shell(s) of neighboring atoms.  Minimum radius:          9.00
+ Augmenting DF domains by 3 shell(s) of neighboring atoms.  Minimum radius:          7.00
+
+ Generating LMO domains. Method=COEFF  Threshold=1.00D-06
+
+ Fitting truncated LMOs to exact LMOs
+
+ Minimum LMO domain size:                222
+ Maximum LMO domain size:                222
+ Average LMO domain size:              222.0   (sparsity   0.00 %)
+
+ CPU time for Fitlmo:                   0.00 sec.
+
+ PAO orbital domain sizes:   165 (min),  222 (max),  201.2 (average)
+ DF  orbital domain sizes:   403 (min),  544 (max),  492.6 (average)
+ RI  orbital domain sizes:   842 (min),  888 (max),  882.2 (average)
+
+ CPU Time for Domains:               0.00 sec. Elapsed time:     0.00 sec. Memory usage:     0.10 MW (max).
+
+ Number of residual matrices on current processor:       16
+ Number of amplitude matrices on current processor:     136
+
+ Fitting basis MP2FIT loaded
+
+ Threshold for block screening:     1.00D-05
+ Threshold for integral screening:  1.00D-10
+
+ CPU time for create_blocked_AO basis:                 0.01 sec, 222 functions, 13 blocks.
+ CPU time for create_blocked_DF basis:                 0.03 sec, 544 functions, 21 blocks.
+ CPU time for create_blocked_RI basis:                 0.04 sec, 888 functions, 13 blocks.
+
+ Fitting basis center dimensions: min=   23, max=   72, average= 41.85
+ Fitting basis block dimensions:  min=   1, max=  36, average= 25.90
+
+ CPU time for project LMOs:                                    0.00 sec.
+ CPU time for project PAOs:                                    0.00 sec.
+
+ Screening PAOs with threshold      1.00D-06
+
+ Minimum PAO vector length:              222
+ Maximum PAO vector length:              222
+ Average PAO vector length:            222.0  (sparsity  0.00 %)
+
+ CPU time for cut/fit of PAO vectors:                          0.00 sec.
+
+ CPU Time for Block_basis:           0.08 sec. Elapsed time:     0.08 sec. Memory usage:     0.14 MW (max).
+ CPU Time for Orbitals(tot):        18.96 sec. Elapsed time:    19.94 sec. Memory usage:     0.14 MW (max).
+ CPU Time for PAO integrals:         0.89 sec. Elapsed time:     0.90 sec. Memory usage:     1.49 MW (max).
+ CPU Time for PAO integrals:         0.00 sec. Elapsed time:     0.01 sec. Memory usage:     0.80 MW (max).
+ CPU Time for PAO amplitudes:        0.19 sec. Elapsed time:     0.19 sec. Memory usage:     1.56 MW (max).
+
+ Generating OSVs using PAO(PERT) amplitudes, throsv= 1.0D-10
+
+ Minimum OSV orbital domain size:         72
+ Maximum OSV orbital domain size:        177
+ Average OSV orbital domain size:      103.9
+
+ CPU Time for OSV_generate:          0.08 sec. Elapsed time:     0.08 sec. Memory usage:     1.29 MW (max).
+
+ Computing distant pair energies using multipole approximation up to order   3
+
+ CPU time for computing multipole integrals (PAO/LMO):         0.18 sec
+ CPU time for transforming integrals to OSV domains:           0.00 sec
+ CPU time for distant pair energies:                           0.29 sec
+
+ Distant pairs selected using the multipole order 3,  thrdist=1.0D-06  thrvdist=1.0D-07
+
+ Semi-canonical distant pair energies, multipole-orders 1-3    0.00000000  0.00000000  0.00000000
+
+
+ CPU Time for osv_mltp:              0.28 sec. Elapsed time:     0.29 sec. Memory usage:     0.49 MW (max).
+
+ Number of strong pairs:                 136
+ Number of close pairs:                    0
+ Number of weak pairs:                     0
+ Number of distant pairs:                  0  (treated by iterative multipole approximation, thrdist= 1.0D-06)
+ Number of very distant pairs:             0  (treated by non-iterative multipole approximation, thrvdist= 1.0D-07)
+ Total number of pairs in LMP2:          136
+
+ Number of pairs per orbital (min, max, average):
+
+ Strong pairs:              16    16    16.0
+ Close pairs:                0     0     0.0
+ Weak  pairs:                0     0     0.0
+ Distant  pairs:             0     0     0.0
+ Very distant pairs:         0     0     0.0
+
+ CPU Time for Distribute_pairs:      0.00 sec. Elapsed time:     0.00 sec. Memory usage:     0.49 MW (max).
+
+ Number of residual matrices on current processor:      136
+ Number of amplitude matrices on current processor:     136
+ F12 pair list with SKIPF=3, 136 pairs.
+
+ Minimum OSV pair domain size:            72
+ Maximum OSV pair domain size:           319
+ Average OSV pair domain size:         195.6
+ Total number of OSVs:                  1663
+ Total number of OSV amplitudes:     5516134
+
+ CPU Time for OSV_pairdom:           1.57 sec. Elapsed time:     1.58 sec. Memory usage:     5.43 MW (max).
+ CPU Time for OSV integrals:         2.09 sec. Elapsed time:     2.21 sec. Memory usage:    10.83 MW (max).
+ CPU Time for OSV_smatrix:           0.05 sec. Elapsed time:     0.06 sec. Memory usage:     9.87 MW (max).
+
+ nosvmx= 319  nosvt= 1663  lens=         0  lenr=   4443425  lent=   5516134  leng=   5516134  lenw=   4939873  lenosv=    101761
+
+ Generating PNOs using OSV(SC) amplitudes, THRPNO_EN=0.9970,  THRPNO_OCC=1.0D-08,  KEEP_DIAG=T  THRPNO_DIAG=0.0D+00
+
+ Generating PNOs for LCCSD with thresholds: THREN_CC:  0.99700, THRPNO_CC:1.0D-08
+
+                                                PNO-LMP2     PNO_LCCSD
+ Minimum PNO domain size:                            37            37
+ Maximum PNO domain size:                           101           101
+ Average PNO domain size:                          61.2          61.2
+ Total number of PNOs:                             8325          8325
+ Total number of PNO amplitudes:                 525335
+ Local number of PNO amplitudes:                 525335
+ Length of local PNO residual:                   525335
+ Length of local W-matrix:                      1673491
+
+ Semi-canonical OSV correlation energy:     -0.92409938
+ Semi-canonical PNO correlation energies:   -0.92397560   -0.92397560
+
+ Semi-canonical domain correction:          -0.00012378   -0.00012378
+
+ CPU Time for PNO_generate:          0.97 sec. Elapsed time:     1.24 sec. Memory usage:    11.01 MW (max).
+
+ Local length of PNO overlap matrix for PNO-LMP2:    7312584  Number of blocks:    1920  number of pairs   136
+
+ GA space for pno_smat:              7.31 MW (tot),              7.31 MW (min),              7.31 MW (max), using processor specific storage
+
+ CPU Time for READ_OSV_SBUF:         0.01 sec. Elapsed time:     0.02 sec. Memory usage:     3.60 MW (max).
+ CPU Time for PNO_SMAT:              0.45 sec. Elapsed time:     0.50 sec. Memory usage:     3.57 MW (max).
+
+ Denominator shift:          0.2000
+
+ ITER.      SQ.NORM     CORR.ENERGY   TOTAL ENERGY   ENERGY CHANGE     VAR    DIIS
+   1      0.26574262    -0.94447958  -268.77179716    -0.94447958  0.29D-02   1  1
+   2      0.28193501    -0.95528845  -268.78260603    -0.01080887  0.15D-03   2  2
+   3      0.29190835    -0.95582029  -268.78313787    -0.00053184  0.61D-05   3  3
+   4      0.29296539    -0.95583856  -268.78315614    -0.00001827  0.39D-06   4  4
+   5      0.29291350    -0.95583982  -268.78315740    -0.00000126  0.20D-07   5  5
+   6      0.29288550    -0.95583988  -268.78315746    -0.00000006  0.10D-08   6  6
+
+                                            PNO-LMP2        PNO-LMP2_CORR
+  PNO-LMP2 correlation energy          -0.955839879120    -0.955963662474
+ !PNO-LMP2 total energy              -268.783157459521  -268.783281242875
+
+ CPU Time for PNO-LMP2:              0.87 sec. Elapsed time:     0.98 sec. Memory usage:     4.37 MW (max).
+
+ Computing the F12/3*A(LOC,FIX) energy correction
+ ================================================
+ Options for MP2-F12: THRF12=0.0E+00  THRVAL=0.1E-03  N_RI_BATCH=0
+ Geminal basis:    OPTFULL  GEM_TYPE=SLATER  BETA=1.0  NGEM=6
+
+ Optimizing Gaussian exponents for each gem_beta
+
+ Geminal optimization for beta= 1.0000
+ Weight function:   m=0, omega= 1.4646
+
+ Augmented Hessian optimization of geminal fit. Trust ratio= 0.40000
+ Convergence reached after   2 iterations. Final gradient= 8.53D-16, Step= 4.26D-06, Delta= 1.28D-09
+
+ Alpha:                 0.19532     0.81920     2.85917     9.50073    35.69989   197.79328
+ Coeff:                 0.27070     0.30552     0.18297     0.10986     0.06810     0.04224
+
+ Screened 136 pairs with threshold 0.0E+00, 136 pairs actually used.
+
+  F12(PNO) correction                  -0.217859535716
+  PNO-LMP2-F12(PNO) corr. energy       -1.173699414836
+ !PNO-LMP2-F12(PNO) total energy     -269.001016995237
+
+ CPU Time for F12_energy:           51.73 sec. Elapsed time:    52.59 sec. Memory usage:    10.66 MW (max).
+  Scaling factor for (T)                1.227924718852
+
+ PNO-LMP2-F12 energy contributions
+ =================================
+                            OSV-LMP2(SC)     PNO-LMP2     PNO-SCS-LMP2   F12 contrib.  PNO-LMP2-F12  PNO-SCS-LMP2-F12  %(PNO/OSV)  AVDOM(PNO)
+ Strong pair energy:        -0.92409938    -0.95583988    -0.94268209    -0.21785954    -1.17369941    -1.18225701       103.43       61.2
+ Close pair energy:          0.00000000     0.00000000     0.00000000     0.00000000     0.00000000     0.00000000         0.00        0.0
+ Weak pair energy :          0.00000000     0.00000000     0.00000000     0.00000000     0.00000000     0.00000000         0.00        0.0
+ Distant pair energy:        0.00000000     0.00000000     0.00000000     0.00000000     0.00000000     0.00000000         0.00        0.0
+ Total correl. energy:      -0.92409938    -0.95583988    -0.94268209    -0.21785954    -1.17369941    -1.18225701       103.43       61.2
+
+ GA space for pno_smat:              7.31 MW (tot),              7.31 MW (min),              7.31 MW (max), using processor specific storage
+
+ CPU Time for READ_OSV_SBUF:         0.01 sec. Elapsed time:     0.02 sec. Memory usage:     3.36 MW (max).
+ CPU Time for PNO_SMAT:              0.46 sec. Elapsed time:     0.49 sec. Memory usage:     3.33 MW (max).
+
+ Denominator shift:          0.2000
+
+ ITER.      SQ.NORM     CORR.ENERGY   TOTAL ENERGY   ENERGY CHANGE     VAR    DIIS
+   1      0.29288847    -0.95583988  -268.78315746    -0.95583988  0.12D-09   1  1
+   2      0.29288807    -0.95583988  -268.78315746    -0.00000000  0.16D-10   2  2
+
+ LMP2 results with LCCSD domains:
+ ================================
+                                            PNO-LMP2        PNO-LMP2_CORR
+  PNO-LMP2 correlation energy          -0.955839882527    -0.955963662474
+  PNO-LMP2 total energy              -268.783157462928  -268.783281242875
+  F12(PNO) correction                  -0.217859535716
+  PNO-LMP2-F12 correlation energy      -1.173699418242
+  PNO-LMP2-F12 total energy          -269.001016998643
+
+  PNO-LMP2-F12 domain correction        0.000000003407
+
+ CPU Time for PNO-LMP2(tot):        59.93 sec. Elapsed time:    61.51 sec. Memory usage:    13.90 MW (max).
+
+ Energy thresholds for pair classes:  THRCLOSE=1.00D-04  THRWEAK= 1.00D-05  THRDISTC=0.00D+00
+
+ Strong and close pairs optimized in LCCSD, close pair residuals are approximated (keepcls=1).
+
+ Number of optimized pairs:         136
+ Number of strong pairs:            117
+ Number of close pairs:              19
+ Number of weak pairs:                0
+ Total number of pairs:             136
+
+ Length of pair-specific S-blocks:   130.75 MW,  length of unique S-blocks    34.39 MW
+
+ CPU Time for LCC_opdom:             0.05 sec. Elapsed time:     0.04 sec. Memory usage:     0.31 MW (max).
+ CPU Time for LCC_float:             0.00 sec. Elapsed time:     0.01 sec. Memory usage:     0.15 MW (max).
+
+ CPU Time for LCC_opdom:             0.05 sec. Elapsed time:     0.06 sec. Memory usage:     0.31 MW (max).
+ CPU Time for LCC_load:              0.01 sec. Elapsed time:     0.01 sec. Memory usage:     2.85 MW (max).
+
+ Estimated GA usage of PNO-LCCSD-F12 integrals:                  0.00 MW
+ Maximum GA usage after allocating GAs for CCSD integrals:       0.00 MW
+
+ CPU Time for CCSD integrals:      150.20 sec. Elapsed time:   161.03 sec. Memory usage:    19.49 MW (max).
+
+ GA space for pno_smat:             34.39 MW (tot),             34.39 MW (min),             34.39 MW (max), using node specific storage
+ CPU Time for OSV_SMAT_LCC:          0.05 sec. Elapsed time:     0.10 sec. Memory usage:    21.30 MW (max).
+ CPU Time for READ_OSV_SBUF:         0.00 sec. Elapsed time:     0.01 sec. Memory usage:    21.30 MW (max).
+ CPU Time for PNO_SMAT_LCC:          2.08 sec. Elapsed time:     2.32 sec. Memory usage:    19.86 MW (max).
+
+ Current GA usage:                   0.00 MW.  Maximum GA usage up to this point:            0.00 MW
+
+ Solving PNO-LCCSD equations
+
+ K-Operators in non-linear terms are projected
+
+ Close pairs are approximated (keepcls=1, max_ijkl=0, skip_ijkl=0, maxik=0)
+
+ Weak pairs pairs are treated by CEPA(2)
+
+ Denominator shifts:     0.15 (singles),  0.20 (doubles)
+
+ ITER.      SQ.NORM     CORR.ENERGY   TOTAL ENERGY   ENERGY CHANGE     VAR        VART1     DIIS     TIME
+    1     0.29995069    -1.14831708  -268.97563466     0.02538234    0.34D-02    0.71D-02   1  1    21.50
+    2     0.29430868    -1.17679469  -269.00411227    -0.02847761    0.67D-03    0.24D-03   2  2    44.89
+    3     0.32163922    -1.18053258  -269.00785016    -0.00373788    0.68D-04    0.16D-03   3  3    65.93
+    4     0.32881909    -1.18149712  -269.00881470    -0.00096454    0.17D-04    0.38D-04   4  4    87.14
+    5     0.33223313    -1.18182761  -269.00914519    -0.00033050    0.39D-05    0.16D-04   5  5   107.99
+    6     0.33405920    -1.18199842  -269.00931600    -0.00017081    0.11D-05    0.59D-05   6  6   128.82
+    7     0.33526185    -1.18210991  -269.00942749    -0.00011148    0.32D-06    0.18D-05   7  7   150.96
+    8     0.33589533    -1.18212168  -269.00943926    -0.00001178    0.86D-07    0.37D-06   8  8   171.47
+    9     0.33611723    -1.18212857  -269.00944616    -0.00000689    0.23D-07    0.51D-07   1  8   192.71
+   10     0.33617157    -1.18213365  -269.00945123    -0.00000507    0.55D-08    0.69D-08   2  8   214.67
+   11     0.33618476    -1.18213204  -269.00944962     0.00000161    0.97D-09    0.21D-08   3  8   235.99
+   12     0.33619486    -1.18213392  -269.00945150    -0.00000188    0.23D-09    0.41D-09   4  8   256.92
+   13     0.33619932    -1.18213393  -269.00945151    -0.00000001    0.37D-10    0.16D-09   5  8   277.79
+
+ Convergence reached
+
+  T1 diagnostic   0.01723
+  D1 diagnostic   0.06932
+   
+  Reference energy                   -267.806801181809
+  CABS singles correction              -0.020516398592
+  New reference energy               -267.827317580401
+
+  Correlation contributions without domain correction:
+
+  PNO-LCCSD-F12 singles energy          0.000535456540
+  PNO-LCCSD-F12a strong pair energy    -1.181566732625
+  PNO-LCCSD-F12b strong pair energy    -1.154962618240
+  PNO-LCCSD-F12 close pair energy      -0.001102650931
+  PNO-CEPA(2)-F12 weak pair energy      0.000000000000
+  PNO-SCS-LMP2 distant pair energy      0.000000000000
+
+  Results including domain correction:
+
+  PNO-LMP2-F12 correction               0.000000003407
+  PNO-LCCSD-F12a correlation energy    -1.182133923609
+  PNO-LCCSD-F12b correlation energy    -1.155529809224
+
+ !PNO-LCCSD-F12a total energy        -269.009451504010
+ !PNO-LCCSD-F12b total energy        -268.982847389625
+
+ Maximum stack memory usage in PNO-LCCSD iterations: 23.95 MW
+ Maximum GA memory usage up to this point: .00 MW
+ Maximum local disk usage in MB: 4622.46 (current)   4622.46 (maximum)   4622.46 (average)
+ Maximum local disk usage per node: 4622.46 MB
+
+ CPU Time for PNO_LCCSD(it):       224.92 sec. Elapsed time:   277.82 sec. Memory usage:    20.05 MW (max).
+
+ Selecting triples using THRCLOSE_T_PRE = 0.100E-03, THRWEAK_T_PRE = 0.000E+00, TRIPTYP = 2
+ Selected 800 of 800 triples
+
+ DF domains for (T) with RDFDOM_T: .0, IDFDOM_T: 0
+
+ Options for (T) corrections
+   Post (T0) method -  (T1): F, iterative (T): T
+   Iterative (T) - THRCONV_TRIP: 0.100E-05, SKIP_TIJKW: F, THRFINT_EN: 0.100E-03
+   Triple-specific virtuals - TNO
+   PNO thresholds - (T0): 0.100E-09, post (T0): 0.100E-06
+   LMO domains - MODOM_T0: 2
+   Technical settings - TITER_DYNAMIC: F, USE_SOSV: F
+
+
+ Triple PAO domain sizes: 222 (maximum), 220.7 (average) 220.8 (average, cubed)
+ Triple OSV domain sizes: 449 (maximum), 280.6 (average) 293.6 (average, cubed)
+ Triple PNO domain sizes: 172 (maximum), 120.4 (average) 123.6 (average, cubed)
+ Triple PNO (iterations) domain sizes: 75 (maximum), 46.8 (average) 48.9 (average, cubed)
+
+ Estimated GA usage of (T) amplitudes 101.67 MW
+
+
+                                         Large domain       Small domain       Domain corr.
+  Triples [T0] contribution            -0.041798055332    -0.041088667318    -0.000709388014
+  Triples [T0*] contribution           -0.051324865342    -0.050453790264    -0.000871075077
+  Triples (T0) contribution            -0.039537372531    -0.038842314005    -0.000695058526
+  Triples (T0*) contribution           -0.048548917049    -0.047695437504    -0.000853479545
+
+  LCCSD(T0)-F12a corr. energy          -1.221671296140
+  LCCSD(T0)-F12a total energy        -269.048988876541
+
+  LCCSD(T0)-F12b corr. energy          -1.195067181755
+  LCCSD(T0)-F12b total energy        -269.022384762156
+
+
+ Screening triples with THRTRIP_IT = 0.100E-06
+ 800 out of 800 ( 100.00%) triples survived for the iterations
+
+ ITER.   [T] ENERGY    ENERGY CHANGE    TIME
+    0    -0.04108867     0.00000000     0.00
+    1    -0.04253517    -0.00144650    45.20
+    2    -0.04283487    -0.00029970    89.83
+    3    -0.04285612    -0.00002125   134.79
+    4    -0.04286345    -0.00000733   178.93
+    5    -0.04286390    -0.00000045   223.51
+
+ Convergence reached
+
+
+                                         Small domain        Corrected
+  Triples [T] contribution             -0.042863904873    -0.043573292887
+  Triples [T*] contribution            -0.052633648340    -0.053504723418
+  Triples (T) contribution             -0.040480820390    -0.041175878917
+  Triples (T*) contribution            -0.049707399997    -0.050560879542
+
+  LCCSD(T)-F12a corr. energy           -1.223309802525
+ !LCCSD(T)-F12a total energy         -269.050627382927
+
+  LCCSD(T)-F12b corr. energy           -1.196705688140
+ !LCCSD(T)-F12b total energy         -269.024023268541
+
+
+ GA_Put processed 744.92 MW globally, average elapsed time per process: 3.03 sec
+ GA_Get processed 58922.09 MW globally, average elapsed time per process: 78.24 sec
+
+ REMARK: Memory usage printed may not be correct.
+ CPU Time for LCCSD(T)(tot):      1002.21 sec. Elapsed time:  1119.05 sec. Memory usage:    21.30 MW (max).
+
+ Direct file usage                 196.23 MB (local),          196.23 MB (max),            196.23 MB (tot)
+
+ Max. memory usage (overall):       21.30 MW (local),           21.30 MW (max),             21.30 MW (tot)
+ Max. GA usage (overall):            0.00 MW (local),            0.00 MW (max),              0.00 MW (tot)
+ Max. memory+GA usage:              21.30 MW (local),           21.30 MW (max),             21.30 MW (tot)
+
+
+ **********************************************************************************************************************************
+ DATASETS  * FILE   NREC   LENGTH (MB)   RECORD NAMES
+              1      19       32.05       500      610      700      900      950      970     1000      129      960     1100   
+                                          VAR    BASINP    GEOM    SYMINP    ZMAT    AOBASIS   BASIS     P2S    ABASIS      S 
+                                         1400     1410     1200     1210     1080     1600     1650     1700      960(1)
+                                           T        V       H0       H01     AOSYM     SMH    MOLCAS    OPER    ABASIS    
+
+              2       5        4.97       700     1000      520     2100     7360   
+                                         GEOM     BASIS   MCVARS     RHF    F12ABS    
+
+ PROGRAMS   *        TOTAL  LCCSD(T)     DF-HF       INT
+ CPU TIMES  *      1096.90   1081.20     15.08      0.49
+ REAL TIME  *      1219.04 SEC
+ DISK USED  *       604.49 MB
+ **********************************************************************************************************************************
+
+ PNO-LCCSD(T)-F12/cc-pVDZ-F12 energy=   -269.024023268541
+
+    LCCSD(T)-F12           DF-HF
+   -269.05062738   -267.80680118
+ **********************************************************************************************************************************
+ Molpro calculation terminated
