@@ -305,10 +305,10 @@ def gp_optimize(model):
                     Real(0.9, 3.6, prior="log-uniform", name="representation_two_body_decay"),
                     Real(0.57/2, 0.57*2, prior="log-uniform", name="representation_three_body_decay"),
                     Real(13.4/2, 13.4*2, prior="log-uniform", name="representation_three_body_weight"),
-                    Real(5, 20, prior="log-uniform", name="kernel_sigma"),
+                    Real(5.0, 20.0, prior="log-uniform", name="kernel_sigma"),
                     Real(1e-10, 1e-3, prior="log-uniform", name="krr_l2_reg")
                     ]
-    idx = list(range(model.data.energies.size))[:200]
+    idx = list(range(model.data.energies.size))[:50]
 
     # skopt just returns the lowest error, rather than the fitted GP model,
     # so will have to share the cv-folds between model fits.
@@ -323,11 +323,13 @@ def gp_optimize(model):
 
         return -score
 
-    results = skopt.gp_minimize(evaluate_model, search_space, n_calls=20)
+    results = skopt.gp_minimize(evaluate_model, search_space, n_restarts_optimizer=20,
+                                n_calls=20)
     print(results)
 
 
 
+#TODO train GP on test loss and minimize to get best params
 #TODO svd reduction of training set
 
 if __name__ == "__main__":
