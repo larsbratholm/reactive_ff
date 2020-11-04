@@ -10,8 +10,12 @@ from qml.kernels.gradient_kernels import get_local_kernel, get_local_symmetric_k
 from qml.math import cho_solve
 from sklearn.metrics import mean_absolute_error
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import KFold, cross_validate
+from sklearn.model_selection import KFold, cross_validate, cross_val_predict
+from sklearn.linear_model import Lasso
 import time
+import skopt
+from skopt.space import Integer, Real
+from skopt.utils import use_named_args
 
 
 class Data(qml.qmlearn.data.Data):
@@ -68,52 +72,94 @@ class FCHL_KRR(BaseEstimator):
         with analytical gradients.
     """
 
-    def __init__(self, data=None, 
-                       representation__nRs2=24,
-                       representation__nRs3=20,
-                       representation__nFourier=1,
-                       representation__eta2=0.32,
-                       representation__eta3=2.7,
-                       representation__zeta=np.pi,
-                       representation__rcut=8.0,
-                       representation__acut=8.0,
-                       representation__two_body_decay=1.8,
-                       representation__three_body_decay=0.57,
-                       representation__three_body_weight=13.4,
-                       kernel__sigma=10.0,
-                       krr__l2_reg=1e-10):
+    def __init__(self, data=None,
+                       elements=None,
+                       representation_nRs2=24,
+                       representation_nRs3=20,
+                       representation_eta2=0.32,
+                       representation_eta3=2.7,
+                       representation_zeta=np.pi,
+                       representation_rcut=8.0,
+                       representation_acut=8.0,
+                       representation_two_body_decay=1.8,
+                       representation_three_body_decay=0.57,
+                       representation_three_body_weight=13.4,
+                       kernel_sigma=10.0,
+                       krr_l2_reg=1e-10):
         self.data = data
-        self.elements = get_unique(self.data.nuclear_charges)
-        self.representation__nRs2 = representation__nRs2
-        self.representation__nRs3 = representation__nRs3
-        self.representation__nFourier = representation__nFourier
-        self.representation__eta2 = representation__eta2
-        self.representation__eta3 = representation__eta3
-        self.representation__zeta = representation__zeta
-        self.representation__rcut = representation__rcut
-        self.representation__acut = representation__acut
-        self.representation__two_body_decay = representation__two_body_decay
-        self.representation__three_body_decay = representation__three_body_decay
-        self.representation__three_body_weight = representation__three_body_weight
-        self.kernel__sigma = kernel__sigma
-        self.krr__l2_reg = krr__l2_reg
+        self.elements = elements
+        if self.elements is None:
+            self.elements = get_unique(self.data.nuclear_charges)
+        self.representation_nRs2 = representation_nRs2
+        self.representation_nRs3 = representation_nRs3
+        self.representation_eta2 = representation_eta2
+        self.representation_eta3 = representation_eta3
+        self.representation_zeta = representation_zeta
+        self.representation_rcut = representation_rcut
+        self.representation_acut = representation_acut
+        self.representation_two_body_decay = representation_two_body_decay
+        self.representation_three_body_decay = representation_three_body_decay
+        self.representation_three_body_weight = representation_three_body_weight
+        self.kernel_sigma = kernel_sigma
+        self.krr_l2_reg = krr_l2_reg
         # Scikit-learn might parse xyz files in every cv split
         # unless the initialized data class is passed as input.
         if self.data is None:
             self.data = Data("./exyz/*.xyz")
 
+        self.scaler = Lasso(1e-9)
+
     def fit(self, X, y=None):
         """ Fit the model. X assumed to be indices
         """
+        energy_offset = self._scale(X)
         self.training_representations, self.training_gradients = \
             self._create_representations(X)
         self.training_indices = X
 
         kernel = get_local_symmetric_kernel(self.training_representations,
-                    data.nuclear_charges[X], self.kernel__sigma)
+                    data.nuclear_charges[X], self.kernel_sigma)
 
-        kernel[np.diag_indices_from(kernel)] += self.krr__l2_reg
-        self.alphas = cho_solve(kernel, data.energies[X])
+        kernel[np.diag_indices_from(kernel)] += self.krr_l2_reg
+        energies = self.data.energies[X] - energy_offset
+        self.alphas = cho_solve(kernel, energies)
+
+    def _scale(self, indices):
+        """ Fit a linear model to estimate element self-energies
+        """
+        energies = self.data.energies[indices]
+        nuclear_charges = self.data.nuclear_charges[indices]
+        features = self._featurizer(nuclear_charges)
+        self.scaler.fit(features, energies)
+        return self.scaler.predict(features)
+
+    def _revert_scale(self, indices):
+        """ Transform predictions back to the original energy space
+        """
+        nuclear_charges = self.data.nuclear_charges[indices]
+        features = self._featurizer(nuclear_charges)
+        energy_offsets = self.scaler.predict(features)
+        return energy_offsets
+
+    def _featurizer(self, nuclear_charges):
+        """
+        Get the counts of each element as features.
+        """
+
+        n = len(nuclear_charges)
+        m = len(self.elements)
+        element_to_index = {v:i for i, v in enumerate(self.elements)}
+        features = np.zeros((n,m), dtype=int)
+
+        for i, charge in enumerate(nuclear_charges):
+            count_dict = {k:v for k,v in zip(*np.unique(charge, return_counts=True))}
+            for key, value in count_dict.items():
+                if key not in element_to_index:
+                    continue
+                j = element_to_index[key]
+                features[i, j] = value
+
+        return features
 
     def predict(self, X, predict_forces=False):
         """ Predict energies and optionally forces of the indices X
@@ -127,7 +173,7 @@ class FCHL_KRR(BaseEstimator):
         """
         y_pred = self.predict(X)
         y_true = self.data.energies[X]
-        return - mean_absolute_error(y_true, y_pred) * 627.5
+        return - mean_absolute_error(y_true, y_pred)
 
     def _predict_energy(self, indices):
         test_representations, _ = self._create_representations(indices, calculate_gradients=False)
@@ -137,9 +183,11 @@ class FCHL_KRR(BaseEstimator):
                 test_representations,
                 self.data.nuclear_charges[self.training_indices],
                 self.data.nuclear_charges[indices],
-                self.kernel__sigma)
+                self.kernel_sigma)
 
-        return np.dot(kernel, self.alphas)
+        predictions = np.dot(kernel, self.alphas)
+        energy_offset = self._revert_scale(indices)
+        return predictions + energy_offset
 
     def _predict_energy_and_forces(self, indices):
         test_representations, test_gradients = self._create_representations(indices)
@@ -149,7 +197,7 @@ class FCHL_KRR(BaseEstimator):
                                 test_representations,
                                 self.data.nuclear_charges[self.training_indices],
                                 self.data.nuclear_charges[indices],
-                                self.kernel__sigma)
+                                self.kernel_sigma)
 
         force_kernel = get_local_gradient_kernel(
                                 self.training_representations,
@@ -157,14 +205,14 @@ class FCHL_KRR(BaseEstimator):
                                 test_gradients,
                                 self.data.nuclear_charges[self.training_indices],
                                 self.data.nuclear_charges[indices],
-                                self.kernel__sigma)
+                                self.kernel_sigma)
 
         kernel = np.concatenate((energy_kernel, force_kernel))
         energies_and_forces = np.dot(kernel, self.alphas)
 
         natoms = self.data.natoms[indices]
         n_molecules = len(indices)
-        energies = energies_and_forces[:n_molecules]
+        energies = energies_and_forces[:n_molecules] + self._revert_scale(indices)
 
         forces = []
         start_index = n_molecules
@@ -186,13 +234,13 @@ class FCHL_KRR(BaseEstimator):
         gradients = []
         for charge, xyz, n in zip(nuclear_charges, coordinates, natoms):
             output = generate_fchl_acsf(charge, xyz, elements=self.elements,
-                            nRs2=self.representation__nRs2, nRs3=self.representation__nRs3,
-                            nFourier=self.representation__nFourier, eta2=self.representation__eta2,
-                            eta3=self.representation__eta3, zeta=self.representation__zeta,
-                            rcut=self.representation__rcut, acut=self.representation__acut,
-                            two_body_decay=self.representation__two_body_decay,
-                            three_body_decay=self.representation__three_body_decay,
-                            three_body_weight=self.representation__three_body_weight,
+                            nRs2=self.representation_nRs2, nRs3=self.representation_nRs3,
+                            eta2=self.representation_eta2,
+                            eta3=self.representation_eta3, zeta=self.representation_zeta,
+                            rcut=self.representation_rcut, acut=self.representation_acut,
+                            two_body_decay=self.representation_two_body_decay,
+                            three_body_decay=self.representation_three_body_decay,
+                            three_body_weight=self.representation_three_body_weight,
                             pad=max_atoms, gradients=calculate_gradients)
 
             if calculate_gradients:
@@ -213,16 +261,78 @@ class FCHL_KRR(BaseEstimator):
 #    elements_transform = get_unique(nuclear_charges)
 #    if not np.isin(elements_transform, self.elements).all():
 #        print("Warning: Trying to transform molecules with elements",
-#              "not included during fit in the %s method." % self.__class__.__name__,
+#              "not included during fit in the %s method." % self._class_._name_,
 #              "%s used in training but trying to transform %s" % (str(self.elements), str(element_transform)))
 
 
+#TODO GP cross validate params?
 
+def get_largest_errors(model):
+    """ Print the biggest outlier structures
+    """
+    data = model.data
+    idx = list(range(data.energies.size))
+    predictions = cross_val_predict(model, idx, cv=KFold(5, shuffle=True))
+    energies = data.energies[idx]
+    errors = abs(predictions - energies)
+    print(np.mean(errors))
+    max_error_idx = np.argsort(-errors)
+    for i in max_error_idx:
+        print(data.filenames[i], errors[i])
+
+
+def optimize_hyper_params(model, method="gp"):
+    """ Optimize hyper parameters
+    """
+    if method == "gp":
+        return gp_optimize(model)
+    elif method == "tpe":
+        return tpe_optimize(model)
+    print("Unknown method:", method)
+    raise SystemExit
+
+def gp_optimize(model):
+    """ Optimize hyper-parameters with gaussian processes
+        via the scikit-optimize library
+    """
+    search_space = [Integer(12, 48, prior="log-uniform", name="representation_nRs2"),
+                    Integer(10, 40, prior="log-uniform", name="representation_nRs3"),
+                    Real(0.16, 0.64, prior="log-uniform", name="representation_eta2"),
+                    Real(1.35, 5.4, prior="log-uniform", name="representation_eta3"),
+                    Real(np.pi/2, 2*np.pi, prior="log-uniform", name="representation_zeta"),
+                    Real(2.0, 12.0, prior="log-uniform", name="representation_acut"),
+                    Real(2.0, 12.0, prior="log-uniform", name="representation_rcut"),
+                    Real(0.9, 3.6, prior="log-uniform", name="representation_two_body_decay"),
+                    Real(0.57/2, 0.57*2, prior="log-uniform", name="representation_three_body_decay"),
+                    Real(13.4/2, 13.4*2, prior="log-uniform", name="representation_three_body_weight"),
+                    Real(5, 20, prior="log-uniform", name="kernel_sigma"),
+                    Real(1e-10, 1e-3, prior="log-uniform", name="krr_l2_reg")
+                    ]
+    idx = list(range(model.data.energies.size))[:200]
+
+    # skopt just returns the lowest error, rather than the fitted GP model,
+    # so will have to share the cv-folds between model fits.
+    cv = KFold(5, shuffle=True)
+
+    @use_named_args(search_space)
+    def evaluate_model(**params):
+        model.set_params(**params)
+        results = cross_validate(model, idx, cv=cv)
+        score = results['test_score'].mean()
+        score_time = results['score_time'].mean()
+
+        return -score
+
+    results = skopt.gp_minimize(evaluate_model, search_space, n_calls=20)
+    print(results)
+
+
+
+#TODO svd reduction of training set
 
 if __name__ == "__main__":
-    data = Data("./exyz/*.xyz")
-    model = FCHL_KRR(data)
-    idx = list(range(data.energies.size))
-    cv = cross_validate(model, idx[:500], cv=KFold(3, shuffle=True))
-    print(cv)
-    #energies, forces = model.predict(idx[:5], predict_forces=True)
+    data = Data("./exyz_hybrid/*.xyz")
+    data.energies *= 627.5
+    model = FCHL_KRR(data, elements=[1,6,7,8])
+    optimize_hyper_params(model)
+    #get_largest_errors(model)
