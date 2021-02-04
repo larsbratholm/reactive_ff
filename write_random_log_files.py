@@ -1,6 +1,6 @@
 import numpy as np
 from make_testing_input import parse_atomtypes
-from make_batch_input_from_xyz import write_input_files 
+from make_batch_input_from_xyz import write_input_files
 
 def get_structure_subset(molecule_db):
     structures = []
