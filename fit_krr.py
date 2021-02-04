@@ -12,11 +12,12 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import KFold, cross_validate, cross_val_predict
 from sklearn.linear_model import Lasso
-import time
 import skopt
 from skopt.space import Integer, Real
 from skopt.utils import use_named_args
-
+import matplotlib.pyplot as plt
+import numpy
+import joblib
 
 class Data(qml.qmlearn.data.Data):
     """ The qmlearn data class on develop is a bit outdated, so
@@ -35,6 +36,7 @@ class Data(qml.qmlearn.data.Data):
         self.nuclear_charges = np.empty(self.ncompounds, dtype=object)
         self.natoms = np.empty(self.ncompounds, dtype=int)
         self.energies = np.empty(self.ncompounds, dtype=float)
+        self.filenames = filenames
 
         for i, filename in enumerate(filenames):
             with open(filename, "r") as f:
@@ -85,8 +87,10 @@ class FCHL_KRR(BaseEstimator):
                        representation_three_body_decay=0.57,
                        representation_three_body_weight=13.4,
                        kernel_sigma=10.0,
-                       krr_l2_reg=1e-10):
+                       krr_l2_reg=1e-10,
+                       calculate_gradients=True):
         self.data = data
+        self.calculate_gradients = calculate_gradients
         self.elements = elements
         if self.elements is None:
             self.elements = get_unique(self.data.nuclear_charges)
@@ -113,8 +117,9 @@ class FCHL_KRR(BaseEstimator):
         """ Fit the model. X assumed to be indices
         """
         energy_offset = self._scale(X)
+        #TODO calculate gradients if needed
         self.training_representations, self.training_gradients = \
-            self._create_representations(X)
+            self._create_representations(X, calculate_gradients=self.calculate_gradients)
         self.training_indices = X
 
         kernel = get_local_symmetric_kernel(self.training_representations,
@@ -129,6 +134,7 @@ class FCHL_KRR(BaseEstimator):
         """
         energies = self.data.energies[indices]
         nuclear_charges = self.data.nuclear_charges[indices]
+        coordinates = self.data.coordinates[indices]
         features = self._featurizer(nuclear_charges)
         self.scaler.fit(features, energies)
         return self.scaler.predict(features)
@@ -137,6 +143,7 @@ class FCHL_KRR(BaseEstimator):
         """ Transform predictions back to the original energy space
         """
         nuclear_charges = self.data.nuclear_charges[indices]
+        coordinates = self.data.coordinates[indices]
         features = self._featurizer(nuclear_charges)
         energy_offsets = self.scaler.predict(features)
         return energy_offsets
@@ -225,6 +232,9 @@ class FCHL_KRR(BaseEstimator):
     def _create_representations(self, indices, calculate_gradients=True):
         """ Create FCHL19 representations and gradients
         """
+        if calculate_gradients and not self.calculate_gradients:
+            print("Model not trained to support gradients.")
+            raise SystemExit
         nuclear_charges = self.data.nuclear_charges[indices]
         coordinates = self.data.coordinates[indices]
         natoms = data.natoms[indices]
@@ -245,41 +255,31 @@ class FCHL_KRR(BaseEstimator):
 
             if calculate_gradients:
                 rep, grad = output
-                gradients.append(grad)
+                gradients.append(grad.astype(np.float32))
             else:
                 rep = output
-            representations.append(rep)
+            representations.append(rep.astype(np.float32))
 
         return np.asarray(representations), np.asarray(gradients)
-
-#def _check_elements(self, nuclear_charges):
-#    """
-#    Check that the elements in the given nuclear_charges was
-#    included in the fit.
-#    """
-#
-#    elements_transform = get_unique(nuclear_charges)
-#    if not np.isin(elements_transform, self.elements).all():
-#        print("Warning: Trying to transform molecules with elements",
-#              "not included during fit in the %s method." % self._class_._name_,
-#              "%s used in training but trying to transform %s" % (str(self.elements), str(element_transform)))
-
-
-#TODO GP cross validate params?
 
 def get_largest_errors(model):
     """ Print the biggest outlier structures
     """
     data = model.data
+    scaled_energies = scaling_test(data)
+    small = get_smallest_distance(data)
+    large = get_largest_minimum_distance(data)
     idx = list(range(data.energies.size))
     predictions = cross_val_predict(model, idx, cv=KFold(5, shuffle=True))
     energies = data.energies[idx]
+    plt.scatter(scaled_energies[idx], predictions-energies)
+    plt.savefig("lol.pdf")
     errors = abs(predictions - energies)
     print(np.mean(errors))
     max_error_idx = np.argsort(-errors)
     for i in max_error_idx:
-        print(data.filenames[i], errors[i])
-
+        print(data.filenames[i], errors[i], predictions[i]-energies[i], scaled_energies[i],
+                small[i], large[i])
 
 def optimize_hyper_params(model, method="gp"):
     """ Optimize hyper parameters
@@ -287,7 +287,8 @@ def optimize_hyper_params(model, method="gp"):
     if method == "gp":
         return gp_optimize(model)
     elif method == "tpe":
-        return tpe_optimize(model)
+        raise NotImplementedError
+        #return tpe_optimize(model)
     print("Unknown method:", method)
     raise SystemExit
 
@@ -295,20 +296,20 @@ def gp_optimize(model):
     """ Optimize hyper-parameters with gaussian processes
         via the scikit-optimize library
     """
-    search_space = [Integer(12, 48, prior="log-uniform", name="representation_nRs2"),
-                    Integer(10, 40, prior="log-uniform", name="representation_nRs3"),
-                    Real(0.16, 0.64, prior="log-uniform", name="representation_eta2"),
-                    Real(1.35, 5.4, prior="log-uniform", name="representation_eta3"),
+    search_space = [Integer(10, 30, prior="log-uniform", name="representation_nRs2"),
+                    Integer(12, 36, prior="log-uniform", name="representation_nRs3"),
+                    Real(0.64, 2, prior="log-uniform", name="representation_eta2"),
+                    Real(0.7, 3, prior="log-uniform", name="representation_eta3"),
                     Real(np.pi/2, 2*np.pi, prior="log-uniform", name="representation_zeta"),
-                    Real(2.0, 12.0, prior="log-uniform", name="representation_acut"),
-                    Real(2.0, 12.0, prior="log-uniform", name="representation_rcut"),
-                    Real(0.9, 3.6, prior="log-uniform", name="representation_two_body_decay"),
+                    Real(2.0, 8.0, prior="log-uniform", name="representation_acut"),
+                    Real(2.0, 10.0, prior="log-uniform", name="representation_rcut"),
+                    Real(1.2, 5.0, prior="log-uniform", name="representation_two_body_decay"),
                     Real(0.57/2, 0.57*2, prior="log-uniform", name="representation_three_body_decay"),
-                    Real(13.4/2, 13.4*2, prior="log-uniform", name="representation_three_body_weight"),
-                    Real(5.0, 20.0, prior="log-uniform", name="kernel_sigma"),
-                    Real(1e-10, 1e-3, prior="log-uniform", name="krr_l2_reg")
+                    Real(12, 52, prior="log-uniform", name="representation_three_body_weight"),
+                    Real(9, 36.0, prior="log-uniform", name="kernel_sigma"),
+                    Real(1e-8, 1e-3, prior="log-uniform", name="krr_l2_reg")
                     ]
-    idx = list(range(model.data.energies.size))[:50]
+    idx = list(range(model.data.energies.size))
 
     # skopt just returns the lowest error, rather than the fitted GP model,
     # so will have to share the cv-folds between model fits.
@@ -317,24 +318,50 @@ def gp_optimize(model):
     @use_named_args(search_space)
     def evaluate_model(**params):
         model.set_params(**params)
-        results = cross_validate(model, idx, cv=cv)
+        results = cross_validate(model, idx, cv=cv, n_jobs=1)
         score = results['test_score'].mean()
         score_time = results['score_time'].mean()
 
         return -score
 
     results = skopt.gp_minimize(evaluate_model, search_space, n_restarts_optimizer=20,
-                                n_calls=20)
-    print(results)
+                                n_calls=50, verbose=True)
+    print(results.x, results.fun)
 
+def cv_prediction_dump(data, model):
+    """ Prints predictions from cv splits
+    """
+    n = 10
+    idx = list(range(data.energies.size))
+    cv = KFold(n, shuffle=True)
+    predictions = np.zeros((len(idx), n+1))
+    for i, (train_val, test) in enumerate(cv.split(idx)):
+        for j, (train, val) in enumerate(cv.split(train_val)):
+            print(i, j)
+            model.fit(train)
+            predictions[test, j] = model.predict(test)
 
+        model.fit(train_val)
+        predictions[test, -1] = model.predict(test)
 
-#TODO train GP on test loss and minimize to get best params
-#TODO svd reduction of training set
+    joblib.dump(predictions, "predictions.pkl", compress=("lzma", 9), protocol=-1)
+
+def get_cv_accuracy(model):
+    cv = KFold(5, shuffle=True)
+    idx = np.random.choice(range(model.data.energies.size), replace=False, size=500)
+    results = cross_validate(model, idx, cv=cv, n_jobs=1)
+    return results['test_score']
 
 if __name__ == "__main__":
+    np.random.seed(42)
     data = Data("./exyz_hybrid/*.xyz")
     data.energies *= 627.5
-    model = FCHL_KRR(data, elements=[1,6,7,8])
-    optimize_hyper_params(model)
-    #get_largest_errors(model)
+    model = FCHL_KRR(data, elements=[1,6,7,8], representation_nRs2=19,
+                representation_nRs3=23, representation_eta2=1.28, representation_eta3=1.60,
+                representation_zeta=3.53, representation_acut=4.78, representation_rcut=4.96,
+                representation_two_body_decay=1.88, representation_three_body_decay=0.84,
+                representation_three_body_weight=33.8, kernel_sigma=18, krr_l2_reg=3.1e-07,
+                calculate_gradients=True)
+
+    model.fit(list(range(data.energies.size)))
+    joblib.dump(model, "model.pkl", compress=("lzma", 9), protocol=-1)
