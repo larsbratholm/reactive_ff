@@ -129,8 +129,8 @@ dmypy.json
 .pyre/
 
 # folders
-log_files/
-xyz/
+./log_files/
+./xyz/
 batch/
 batch_xyz/
 batch_dft/
