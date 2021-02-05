@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# Gather and unpack log_files.tar.gz
 # Q-Chem log-files Used as starting
 # point in normal mode sampling
 cat archives/log_files/log_files?? | tar zx
 
-# Gather and unpack xyz.tar.gz
 # Contains all the generated
 # structures from normal-mode sampling
 cat archives/xyz/xyz?? | tar zx
@@ -32,3 +30,6 @@ tar zxf archives/exyz_dft.tar.gz
 # Unpack exyz_hybrid.tar.gz
 # exyz files with cheap hybrid energies
 tar zxf archives/exyz_hybrid.tar.gz
+
+# Unpack trained models
+cat archives/models/* | tar x
