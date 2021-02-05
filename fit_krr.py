@@ -86,10 +86,8 @@ class FCHL_KRR(BaseEstimator):
                        representation_three_body_decay=0.57,
                        representation_three_body_weight=13.4,
                        kernel_sigma=10.0,
-                       krr_l2_reg=1e-10,
-                       calculate_gradients=True):
+                       krr_l2_reg=1e-10):
         self.data = data
-        self.calculate_gradients = calculate_gradients
         self.elements = elements
         if self.elements is None:
             self.elements = get_unique(self.data.nuclear_charges)
@@ -116,9 +114,8 @@ class FCHL_KRR(BaseEstimator):
         """ Fit the model. X assumed to be indices
         """
         energy_offset = self._scale(X)
-        #TODO calculate gradients if needed
         self.training_representations, self.training_gradients = \
-            self._create_representations(X, calculate_gradients=self.calculate_gradients)
+            self._create_representations(X, calculate_gradients=False)
         self.training_indices = X
 
         kernel = get_local_symmetric_kernel(self.training_representations,
@@ -231,13 +228,10 @@ class FCHL_KRR(BaseEstimator):
     def _create_representations(self, indices, calculate_gradients=True):
         """ Create FCHL19 representations and gradients
         """
-        if calculate_gradients and not self.calculate_gradients:
-            print("Model not trained to support gradients.")
-            raise SystemExit
         nuclear_charges = self.data.nuclear_charges[indices]
         coordinates = self.data.coordinates[indices]
-        natoms = data.natoms[indices]
-        max_atoms = np.max(data.natoms)
+        natoms = self.data.natoms[indices]
+        max_atoms = np.max(self.data.natoms)
 
         representations = []
         gradients = []
@@ -352,6 +346,35 @@ def get_cv_accuracy(model):
     results = cross_validate(model, idx, cv=cv, n_jobs=1)
     return results['test_score']
 
+def save_model(model):
+    nuclear_charges = model.data.nuclear_charges
+    params = {'elements': model.elements,
+              'nRs2': model.representation_nRs2,
+              'nRs3': model.representation_nRs3,
+              'eta2': model.representation_eta2,
+              'eta3': model.representation_eta3,
+              'zeta': model.representation_zeta,
+              'rcut': model.representation_rcut,
+              'acut': model.representation_acut,
+              'two_body_decay': model.representation_two_body_decay,
+              'three_body_decay': model.representation_three_body_decay,
+              'three_body_weight': model.representation_three_body_weight,
+              }
+    training_representations = model.training_representations
+    kernel_sigma = model.kernel_sigma
+    scaler = model.scaler
+
+    model = {'nuclear_charges': nuclear_charges,
+             'params': params,
+             'training_representations': training_representations,
+             'sigma': kernel_sigma,
+             'scaler': model.scaler
+            }
+
+    joblib.dump(model, "models/reactive_fchl.pkl", compress=("lzma", 9), protocol=-1)
+    return
+
+
 if __name__ == "__main__":
     np.random.seed(42)
     data = Data("./exyz_hybrid/*.xyz")
@@ -360,8 +383,7 @@ if __name__ == "__main__":
                 representation_nRs3=23, representation_eta2=1.28, representation_eta3=1.60,
                 representation_zeta=3.53, representation_acut=4.78, representation_rcut=4.96,
                 representation_two_body_decay=1.88, representation_three_body_decay=0.84,
-                representation_three_body_weight=33.8, kernel_sigma=18, krr_l2_reg=3.1e-07,
-                calculate_gradients=True)
+                representation_three_body_weight=33.8, kernel_sigma=18, krr_l2_reg=3.1e-07)
 
     model.fit(list(range(data.energies.size)))
-    joblib.dump(model, "model.pkl", compress=("lzma", 9), protocol=-1)
+    save_model(model)
