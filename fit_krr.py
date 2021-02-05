@@ -15,7 +15,6 @@ from sklearn.linear_model import Lasso
 import skopt
 from skopt.space import Integer, Real
 from skopt.utils import use_named_args
-import matplotlib.pyplot as plt
 import numpy
 import joblib
 
@@ -265,6 +264,7 @@ class FCHL_KRR(BaseEstimator):
 def get_largest_errors(model):
     """ Print the biggest outlier structures
     """
+    import matplotlib.pyplot as plt
     data = model.data
     scaled_energies = scaling_test(data)
     small = get_smallest_distance(data)
