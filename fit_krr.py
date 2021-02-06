@@ -15,7 +15,6 @@ from sklearn.linear_model import Lasso
 import skopt
 from skopt.space import Integer, Real
 from skopt.utils import use_named_args
-import numpy
 import joblib
 
 class Data(qml.qmlearn.data.Data):
@@ -347,7 +346,6 @@ def get_cv_accuracy(model):
     return results['test_score']
 
 def save_model(model):
-    nuclear_charges = model.data.nuclear_charges
     params = {'elements': model.elements,
               'nRs2': model.representation_nRs2,
               'nRs3': model.representation_nRs3,
@@ -360,15 +358,14 @@ def save_model(model):
               'three_body_decay': model.representation_three_body_decay,
               'three_body_weight': model.representation_three_body_weight,
               }
-    training_representations = model.training_representations
-    kernel_sigma = model.kernel_sigma
-    scaler = model.scaler
 
-    model = {'nuclear_charges': nuclear_charges,
+    model = {'nuclear_charges': model.data.nuclear_charges,
              'params': params,
-             'training_representations': training_representations,
-             'sigma': kernel_sigma,
-             'scaler': model.scaler
+             'training_representations': model.training_representations,
+             'sigma': model.kernel_sigma,
+             'scaler': model.scaler,
+             'alphas': model.alphas,
+             'n_atoms': model.data.natoms
             }
 
     joblib.dump(model, "models/reactive_fchl.pkl", compress=("lzma", 9), protocol=-1)

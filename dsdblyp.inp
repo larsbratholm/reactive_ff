@@ -1,0 +1,26 @@
+! B2PLYP D3BJ  RIJK def2-TZVP def2-TZVP/C def2/JK   TIGHTSCF Grid4 FinalGrid6 GRAD
+%method
+FrozenCore FC_ELECTRONS
+Exchange x_PBE
+Correlation c_P86
+LDAOpt C_VWN5
+ScalHFX 0.69
+ScalDFX 0.31
+ScalGGAC 0.44
+ScalLDAC 0.44
+ScalMP2C 1.00
+end
+
+%method
+D3S6 0.48
+D3A1 0.0
+D3S8 0.0
+D3A2 5.6
+end
+%mp2
+RI on
+DoSCS True
+Ps 0.52
+Pt 0.22
+end
+* xyzfile 0 1 ethanol.xyz
