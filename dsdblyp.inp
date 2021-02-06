@@ -1,4 +1,4 @@
-! B2PLYP D3BJ  RIJK def2-TZVP def2-TZVP/C def2/JK   TIGHTSCF Grid4 FinalGrid6 GRAD
+! B2PLYP D3BJ RIJK def2-QZVP def2-QZVPP/C def2/JK TIGHTSCF Grid4 FinalGrid6
 %method
 FrozenCore FC_ELECTRONS
 Exchange x_PBE
